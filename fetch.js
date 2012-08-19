@@ -9,7 +9,7 @@ var l = console.log
 	
 	sql.query(
 		"INSERT INTO `tweets` (`tweetID` ,`timestamp` ,`body` ,`source` ,`userID` ,`userName`, `fullName`) VALUES (?, ?, ?, ?, ?, ?, ?);"
-	,	[ tweet.id, ts, tweet.text, tweet.source, tweet.user.id, tweet.user.screen_name, tweet.user.name  ]
+	,	[ tweet.id_str, ts, tweet.text, tweet.source, tweet.user.id, tweet.user.screen_name, tweet.user.name  ]
 	);
 	
 	l('inserted tweet from ' + tweet.user.name + ' at ' + new Date());
