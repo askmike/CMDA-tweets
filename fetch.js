@@ -23,7 +23,7 @@ var l = function( m ) {
 
 // insert tweet in DB
 ,   insertTweet = function( tweet ) {
-    tweet || return;
+    if( !tweet ) return;
 
     var ts = Math.round( Date.parse( tweet.created_at ) / 1000 );
     sql.query(
@@ -55,5 +55,4 @@ var ping = function() {
     l( 'still alive at ' + new Date() );
 }
 
-ping();
 setInterval( ping, 1000*60*5 );
