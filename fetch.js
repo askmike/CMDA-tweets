@@ -10,10 +10,10 @@ var l = function( m ) {
 
 // check if tweet contains one of the hashes
 ,   checkTweet = function( tweet ) {
-    l('checking tweet : ' + text);
-
     var text = tweet.text
     ,   ret;
+
+    l('checking tweet : ' + text);
 
     hashtags.forEach(function( hash ) {
         if( text.indexOf( '#' + hash ) !== -1 ) ret = tweet;
@@ -23,7 +23,7 @@ var l = function( m ) {
 
 // insert tweet in DB
 ,   insertTweet = function( tweet ) {
-    if( !tweet ) return;
+    tweet || return;
 
     var ts = Math.round( Date.parse( tweet.created_at ) / 1000 );
     sql.query(
