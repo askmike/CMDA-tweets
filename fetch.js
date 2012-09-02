@@ -51,4 +51,9 @@ twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( strea
     stream.on( 'destroy', destroy );
 });
 
+var ping = function() {
+    l( 'still alive at ' + new Date() );
+}
 
+ping();
+setInterval( ping, 1000*60*5 );
