@@ -1,3 +1,19 @@
+var mongoose = require( 'mongoose' );
+var Schema   = mongoose.Schema;
+
+var Tweet = new Schema({
+    body: String
+  , fid: { type: String, index: { unique: true } }
+  , username: { type: String, index: true }
+  , userid: Number
+  , created_at: Date
+  , source: String
+});
+
+mongoose.model( 'Tweet', Tweet );
+mongoose.connect( 'mongodb://localhost/CMDA' );
+Tweet = mongoose.model('Tweet')
+
 var l = function( m ) {
     console.log( m );
     return m;
@@ -38,15 +54,26 @@ var l = function( m ) {
     ,   name: tweet.from_user_name
     }
 
-    var ts = Math.round( Date.parse( tweet.created_at ) / 1000 );
-
+    var date = new Date( tweet.created_at );
+    var ts = date.getTime() / 1000;
+    // sql
     sql.query(
         "INSERT IGNORE INTO `tweets` (`tweetID` ,`timestamp` ,`body` ,`source` ,`userID` ,`userName`, `fullName`) VALUES (?, ?, ?, ?, ?, ?, ?);"
     ,   [ tweet.id_str, ts, tweet.text, tweet.source, tweet.user.id, tweet.user.screen_name, tweet.user.name  ]
     ,   logResult
     );
-}
 
+    // mongo
+    var tweet = new Tweet({
+          body: tweet.text
+        , fid: tweet.id_str
+        , username: tweet.user.screen_name
+        , userid: tweet.user.id
+        , source: tweet.source
+        , fullname: tweet.user.name
+        , created_at: date
+    }).save();
+}
 ,   insert = _.compose( insertTweet, checkTweet )
 
 
@@ -72,16 +99,15 @@ var l = function( m ) {
 ,   pump = _.compose( search, ping );
 
 // connect to the twitter streaming api and watch for CMDA tweets
-twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( stream ) {
-    l( 'start watching the stream at ' + new Date() );
-    stream.on( 'data', insert );
-    stream.on( 'destroy', destroy );
-});
+// twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( stream ) {
+    // l( 'start watching the stream at ' + new Date() );
+    // stream.on( 'data', insert );
+    // stream.on( 'destroy', destroy );
+// });
 
 pump();
 setInterval( pump, 1000*60*10 ); // 10 min
 
-/*
 sql.query('SELECT * FROM tweets', function(err, rows, fields) {
   if (err) throw err;
   var ret = [];
@@ -96,5 +122,4 @@ sql.query('SELECT * FROM tweets', function(err, rows, fields) {
     ,   timestamp: item.timestamp
     });
   });
-  l( ret );
-});*/
+});
