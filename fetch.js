@@ -98,7 +98,7 @@ var l = function( m ) {
 
 ,   pump = _.compose( search, ping );
 
-connect to the twitter streaming api and watch for CMDA tweets
+// connect to the twitter streaming api and watch for CMDA tweets
 twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( stream ) {
     l( 'start watching the stream at ' + new Date() );
     stream.on( 'data', insert );
