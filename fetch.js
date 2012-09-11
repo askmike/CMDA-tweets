@@ -98,21 +98,25 @@ var l = function( m ) {
 
 ,   pump = _.compose( search, ping );
 
-// connect to the twitter streaming api and watch for CMDA tweets
-// twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( stream ) {
-    // l( 'start watching the stream at ' + new Date() );
-    // stream.on( 'data', insert );
-    // stream.on( 'destroy', destroy );
-// });
+connect to the twitter streaming api and watch for CMDA tweets
+twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( stream ) {
+    l( 'start watching the stream at ' + new Date() );
+    stream.on( 'data', insert );
+    stream.on( 'destroy', destroy );
+});
 
 pump();
 setInterval( pump, 1000*60*10 ); // 10 min
+
+/*
+
+    function to dump all tweets from mysql -> mongodb
 
 sql.query('SELECT * FROM tweets', function(err, rows, fields) {
   if (err) throw err;
   var ret = [];
   rows.forEach(function(item) {
-    ret.push({
+    new Tweet({
         fid: item.tweetID
     ,   body: item.body
     ,   username: item.userName
@@ -120,6 +124,6 @@ sql.query('SELECT * FROM tweets', function(err, rows, fields) {
     ,   fullname: item.fullName
     ,   source: item.source
     ,   timestamp: item.timestamp
-    });
+    }).save();
   });
-});
+});*/
