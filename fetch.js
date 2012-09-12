@@ -58,7 +58,10 @@ var l = function( m ) {
 // connect the twitter search api and fetch the 50 latest tweets
 ,   search = function() {
     twit.search('#cmda', { result_type: 'recent', rpp: 50 }, function(err, data) {
-      data.results.forEach( insert );
+        if( err )
+            throw err;
+        if( data )
+            data.results.forEach( insert );
     });
 }
 
