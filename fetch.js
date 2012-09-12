@@ -79,4 +79,4 @@ twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( strea
 });
 
 pump();
-setInterval( pump, 1000*60*5 ); // 5 min
+setInterval( pump, 1000*60*10 ); // 10 min
