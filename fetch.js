@@ -15,7 +15,7 @@ var l = function( m ) {
     ,   ret;
 
     hashtags.forEach(function( hash ) {
-        if( text.indexOf( '#' + hash ) !== -1 ) 
+        if( text.toLowerCase().indexOf( '#' + hash ) !== -1 ) 
             ret = tweet;
     });
     return ret;
@@ -80,3 +80,21 @@ twit.stream( 'statuses/filter', { track: hashtags.join( ',' ) }, function( strea
 
 pump();
 setInterval( pump, 1000*60*10 ); // 10 min
+
+/*
+sql.query('SELECT * FROM tweets', function(err, rows, fields) {
+  if (err) throw err;
+  var ret = [];
+  rows.forEach(function(item) {
+    ret.push({
+        fid: item.tweetID
+    ,   body: item.body
+    ,   username: item.userName
+    ,   userid: item.userID
+    ,   fullname: item.fullName
+    ,   source: item.source
+    ,   timestamp: item.timestamp
+    });
+  });
+  l( ret );
+});*/
